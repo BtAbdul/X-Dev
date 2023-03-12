@@ -1,0 +1,95 @@
+plugins {
+	id 'com.android.application'
+}
+
+android {
+	applicationVariants.configureEach { variant ->
+		variant.outputs.configureEach { output ->
+			def appFileName = "X-Dev-" + variant.versionName + ".apk"
+			outputFileName = appFileName
+		}
+	}
+
+	signingConfigs {
+		testKey {
+			storeFile file('C:\\Users\\weg\\testkey.jks')
+			storePassword 'testkey'
+			keyAlias 'testkey'
+			keyPassword 'testkey'
+		}
+	}
+
+	namespace 'com.faslyling.xdev'
+	compileSdk 33
+
+	defaultConfig {
+		applicationId "com.faslyling.xdev"
+		minSdk 21
+		targetSdk 33
+		versionCode 1
+		versionName "1.0"
+		multiDexEnabled true
+		renderscriptTargetApi 21
+		renderscriptSupportModeEnabled true
+		signingConfig signingConfigs.testKey
+		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+	}
+
+	buildTypes {
+		debug {
+			pseudoLocalesEnabled true
+			signingConfig signingConfigs.testKey
+			shrinkResources false
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+		}
+
+		release {
+			pseudoLocalesEnabled true
+			signingConfig signingConfigs.testKey
+			shrinkResources true
+			minifyEnabled true
+			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+		}
+	}
+	compileOptions {
+		coreLibraryDesugaringEnabled = true
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	}
+	buildFeatures {
+		viewBinding true
+		aidl true
+	}
+	packagingOptions {
+		exclude 'androidsupportmultidexversion.txt'
+		exclude 'META-INF/**.version'
+	}
+	sourceSets {
+		main {
+			java.srcDirs = ['src/main/java']
+			aidl.srcDirs = ['src/main/java', 'src/main/aidl']
+			resources.srcDirs = ['src/main/java', 'src/main/resources']
+			jniLibs.srcDirs = ['src/main/jniLibs']
+		}
+	}
+}
+
+dependencies {
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
+	coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.0.2'
+	implementation 'androidx.multidex:multidex:2.0.1'
+	//noinspection GradleDependency
+	implementation 'com.google.android.material:material:1.5.0'
+	//noinspection GradleDependency
+	implementation 'androidx.preference:preference:1.1.0'
+
+	implementation project(':platform:api')
+	implementation project(':platform:core')
+	implementation project(':platform:util')
+
+	testImplementation 'junit:junit:4.13.2'
+	//noinspection GradleDependency
+	androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+	androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
