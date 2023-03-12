@@ -1,0 +1,47 @@
+plugins {
+	id 'com.android.library'
+}
+
+android {
+	namespace 'com.faslyling.xdev.util'
+	compileSdk 33
+
+	defaultConfig {
+		minSdk 21
+		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+		consumerProguardFiles "consumer-rules.pro"
+	}
+
+	buildTypes {
+		release {
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+		}
+	}
+	compileOptions {
+		coreLibraryDesugaringEnabled = true
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	}
+	buildFeatures {
+		buildConfig false
+	}
+	sourceSets {
+		main {
+			java.srcDirs = ['src/main/java']
+			resources.srcDirs = ['src/main/java', 'src/main/resources']
+		}
+	}
+}
+
+dependencies {
+	api fileTree(dir: 'libs', include: ['*.jar'])
+	coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.0.2'
+
+	//noinspection GradleDependency
+	implementation 'androidx.annotation:annotation:1.2.0'
+	testImplementation 'junit:junit:4.13.2'
+	//noinspection GradleDependency
+	androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+	androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
